@@ -9,33 +9,34 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get root" do
-    get root_url
+    # 'root_path' and 'root_url' are formed automatically by rails
+    # According to what we entered in the routes file under root
+    get root_path
     assert_response :success
     assert_select "title", "#{@base_title}"
   end
 
-  test "should get home" do
-    # 'static_pages_home_url' os a helper that is formed
-    # when adding the '/static_pages/home' entry to the routes.rb file
-    get static_pages_home_url
-    assert_response :success
-    assert_select "title", "#{@base_title}"
-  end
 
   test "should get help" do
-    get static_pages_help_url
+    # 'help_path' and 'help_url' are formed automatically by rails
+    # according to what we entered in the routes file under '/help'
+    get help_path
     assert_response :success
     assert_select "title", "Help | #{@base_title}"
   end
 
   test "should get about" do
-    get static_pages_about_url
+    # 'about_path' and 'about_url' are formed automatically by rails
+    # according to what we entered in the routes file under '/about'
+    get about_path
     assert_response :success
     assert_select "title", "About | #{@base_title}"
   end
 
   test "should get contact" do
-    get static_pages_contact_url
+    # 'contact_path' and 'contact_url' are formed automatically by rails
+    # according to what we entered in the routes file under '/contact'
+    get contact_path
     assert_response :success
     assert_select "title", "Contact | #{@base_title}"
   end
