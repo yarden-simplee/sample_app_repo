@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'sessions/new'
+
   # For each get statement' the first arguement is the custom URL
   # relative to the home path. the 'to:' argument specifies 'controller_name#action_name'
   # The helpers 'arguement_path' and 'arguement_url' will be created for each entry according
@@ -11,6 +13,9 @@ Rails.application.routes.draw do
   get '/contact', to: 'static_pages#contact'
   get '/signup', to: 'users#new'
   post '/signup',  to: 'users#create'
+  get    '/login',   to: 'sessions#new'
+  post   '/login',   to: 'sessions#create'
+  delete '/logout',  to: 'sessions#destroy'
   resources :users # This will make rails acknowledge requests made for Url '/users/id' as well as all other restful actions for the user resource
 
 end
