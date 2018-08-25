@@ -9,8 +9,9 @@ class UsersController < ApplicationController
 
   def create
   	@user = User.new(user_params)   
-    if @user.save
+    if @user.save 
     	log_in @user
+
       flash[:success] = "Welcome to the Sample App!" # For later disdplay of a temp message in case of success
       redirect_to @user # Equivalent to 'redirect_to user_url(@user)'. Rails automatically infers the latter from the former
     else
