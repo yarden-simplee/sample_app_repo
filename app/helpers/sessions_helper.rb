@@ -12,6 +12,11 @@ module SessionsHelper
 		cookies.permanent[:remember_token] = user.remember_token
 	end
 
+	# Returns true if the given user is the current user
+	def current_user?(user)
+		user == current_user
+	end
+
 	# Returns the user coprresponding to the remember token cookie
 	def current_user
 		# The following is actually an assignment and not a comparison
@@ -46,4 +51,18 @@ module SessionsHelper
 		session.delete(:user_id)
 		@current_user = nil
 	end
+
+	# Redirects to stored location (or to the default).
+  def redirect_back_or(default)
+    redirect_to(session[:forwarding_url] || default)
+    # The following deletion happens even though the redirect stastement is written first.
+    # This is because the redirect doesn't actually happen until an explicit
+    # return statement or until the end of a method.
+    session.delete(:forwarding_url)
+  end
+
+  # Stores the URL trying to be accessed.
+  def store_location
+    session[:forwarding_url] = request.original_url if request.get?
+  end
 end

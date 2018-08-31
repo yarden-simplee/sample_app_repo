@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
     	log_in @user # 'log_in' defined in the 'sessions_helper'
     	# When using the ternary operator in ruby, functions who accept arguments must use parentheses (see 'remember' and 'forget' below)
     	params[:session][:remember_me] == '1' ? remember(@user) : forget(@user) # 'remember' and 'forget' also defined in sessions helper
-    	redirect_to @user # Is automatically converted bvy rails to the route for user's profile page - user_url(user)
+    	redirect_back_or @user # Is automatically converted bvy rails to the route for user's profile page - user_url(user)
     else
     	flash.now[:danger] = 'Invalid email/password combination' # 'flash.now' instead of just 'flash' because 'flash' to prevent 'flash persistence'*
   		render 'new'

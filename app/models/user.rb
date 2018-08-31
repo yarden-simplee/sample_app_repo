@@ -7,7 +7,10 @@ class User < ApplicationRecord
 					  format: { with: VALID_EMAIL_REGEX },
 					  uniqueness: { case_sensitive: false } # Rails infers that uniqueness itself is 'true' from this listing
 	has_secure_password
-	validates :password, presence: true, length: { minimum: 6 }
+	validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+	# The 'allow_nil' clause will allow users to omit the password when updating details
+	# New users will still have to submit a valid password upon signing up because
+	# of the built-in validation in 'has_secure_password'
 	
 
 	# Returns the has digest of the given string.
