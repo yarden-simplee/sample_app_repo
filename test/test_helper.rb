@@ -19,6 +19,11 @@ class ActiveSupport::TestCase
   	session[:user_id] = user.id
   end
 
+  # Log out
+  def log_out
+    session[:user_id] = nil
+  end
+
 end
 
 # default class used for integration tests

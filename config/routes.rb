@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
   resources :users # This will make rails acknowledge requests made for Url '/users/id' as well as all other restful actions for the user resource
+  resources :account_activations, only: [:edit]
 
 end
 

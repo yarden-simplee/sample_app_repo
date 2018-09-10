@@ -1,6 +1,7 @@
 class User < ApplicationRecord
-	attr_accessor :remember_token
-	before_save { self.email = email.downcase } # Prefixing with 'self' is optional only on the right hand side of the assignment
+	attr_accessor :remember_token, :activation_token
+	before_save :downcase_email # automatically called before each 'create' and 'update' operation on the database
+	before_create :create_activation_digest # automatically called only before 'create' operations on the database
 	validates :name, presence: true, length: { maximum: 50 }
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
 	validates :email, presence: true, length: { maximum: 255 },
@@ -36,15 +37,45 @@ class User < ApplicationRecord
 	end
 
 	# Returns true if the given token matches the digest
-	def authenticated?(remember_token)
-		# 'remember_digest' is in fact 'self.remember_digest' and is generated automatically
-		# by active record based on the name of the corresponding database column
-		return false if remember_digest.nil?
-		BCrypt::Password.new(remember_digest).is_password?(remember_token)
+	def authenticated?(attribute, token)
+		# 'send' (in fact its 'self.send' but 'self can be omitted in this context')
+		# is a method that receives a method name, either in symbol or string format,
+		# and applies it to the base argument (in this case, 'self').
+		# String interpolation is used because we only know whether it's 
+		# the user's remember token or activation token at run time. Symbols are interpolated as strings.
+		digest = send("#{attribute}_digest")
+		return false if digest.nil?
+		BCrypt::Password.new(digest).is_password?(token)
 	end
 
 	# Forgets a user
 	def forget
 		update_attribute(:remember_digest, nil)
 	end
+
+	# Activates an account.
+	def activate
+		update_columns(activated: true, activated_at: Time.zone.now)
+	end
+
+	# Sends activation email.
+	def send_activation_email
+		UserMailer.account_activation(self).deliver_now
+	end
+
+	private
+
+	# Converts email to all lower-case.
+	def downcase_email
+		self.email.downcase!
+	end
+
+	# Creates and assigns the activation token and digest
+	def create_activation_digest
+		self.activation_token = User.new_token
+		# Since the user model has an 'activation_digest' attribute,
+		# the following will be automatically saved to the database upon user creation
+		self.activation_digest = User.digest(activation_token)
+	end
+
 end
