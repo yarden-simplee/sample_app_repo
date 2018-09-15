@@ -14,19 +14,19 @@ Rails.application.configure do
   # Following is code for actual mail sending in production 
   # requires account activation and credit card insertion
   
-  #config.action_mailer.raise_delivery_errors = true
-  #config.action_mailer.delivery_method = :smtp
-  #host = 'aqueous-inlet-97709.herokuapp.com'
-  #config.action_mailer.default_url_options = { host: host }
-  #ActionMailer::Base.smtp_settings = {
-    #:address        => 'smtp.sendgrid.net',
-    #:port           => '587',
-    #:authentication => :plain,
-    #:user_name      => ENV['SENDGRID_USERNAME'],
-    #:password       => ENV['SENDGRID_PASSWORD'],
-    #:domain         => 'heroku.com',
-   # :enable_starttls_auto => true
-  #}
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  host = 'aqueous-inlet-97709.herokuapp.com'
+  config.action_mailer.default_url_options = { host: host }
+  ActionMailer::Base.smtp_settings = {
+    :address        => 'smtp.sendgrid.net',
+    :port           => '587',
+    :authentication => :plain,
+    :user_name      => ENV['SENDGRID_USERNAME'],
+    :password       => ENV['SENDGRID_PASSWORD'],
+    :domain         => 'heroku.com',
+    :enable_starttls_auto => true
+  }
 
   # email sending code in production end
 
