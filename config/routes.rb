@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'password_resets/new'
+
+  get 'password_resets/edit'
+
   get 'sessions/new'
 
   # For each get statement' the first arguement is the custom URL
@@ -18,6 +22,7 @@ Rails.application.routes.draw do
   delete '/logout',  to: 'sessions#destroy'
   resources :users # This will make rails acknowledge requests made for Url '/users/id' as well as all other restful actions for the user resource
   resources :account_activations, only: [:edit]
+  resources :password_resets,     only: [:new, :create, :edit, :update]
 
 end
 
