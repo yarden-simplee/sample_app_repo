@@ -24,3 +24,16 @@ User.create!(name:  "Example User",
                activated: true,
                activated_at: Time.zone.now)
 end
+
+
+# The reason for the order of the loops below is to intermix 
+# the microposts for use in the status feed. Looping over 
+# the users first gives feeds with big runs of microposts from the same user, 
+# which is visually unappealing. We are using the 'Faker' gem to generate content for microposts
+users = User.order(:created_at).take(6)
+50.times do
+  content = Faker::Lorem.sentence(5)
+  users.each { |user| user.microposts.create!(content: content) }
+end
+
+

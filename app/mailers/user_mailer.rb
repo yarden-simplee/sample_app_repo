@@ -20,3 +20,6 @@ class UserMailer < ApplicationMailer
     mail to: user.email, subject: "Password reset"
   end
 end
+
+
+# *** Sending mails in production is done using 'SendGrid'

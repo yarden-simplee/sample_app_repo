@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   resources :users # This will make rails acknowledge requests made for Url '/users/id' as well as all other restful actions for the user resource
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
+  resources :microposts,          only: [:create, :destroy]
 
 end
 

@@ -20,7 +20,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_template 'users/new'
     assert_select 'div#error_explanation' # Confirm the existence of a div with id 'error_explanation'
     assert_select 'div.alert' # Confirm the existence of a div with class 'alert'
-    assert_select 'form#new_user[action=?]', '/signup' # Confirms the presence of a form with id 'new_user' whose 'action' attribute is equal to the value of '/signup'
+    assert_select 'form#new_user' # Confirms the presence of a form with id 'new_user'
   end
 
   test "valid signup information with account activation" do
