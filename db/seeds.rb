@@ -25,6 +25,7 @@ User.create!(name:  "Example User",
                activated_at: Time.zone.now)
 end
 
+# Microposts
 
 # The reason for the order of the loops below is to intermix 
 # the microposts for use in the status feed. Looping over 
@@ -35,5 +36,13 @@ users = User.order(:created_at).take(6)
   content = Faker::Lorem.sentence(5)
   users.each { |user| user.microposts.create!(content: content) }
 end
+
+# Following relationships
+users = User.all
+user  = users.first
+following = users[2..50]
+followers = users[3..40]
+following.each { |followed| user.follow(followed) }
+followers.each { |follower| follower.follow(user) }
 
 

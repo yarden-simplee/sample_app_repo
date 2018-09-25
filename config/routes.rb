@@ -20,10 +20,16 @@ Rails.application.routes.draw do
   get    '/login',   to: 'sessions#new'
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
-  resources :users # This will make rails acknowledge requests made for Url '/users/id' as well as all other restful actions for the user resource
+  # resources :users # This will make rails acknowledge requests made for Url '/users/id' as well as all other restful actions for the user resource
+  resources :users do # Will generate URLs of the format '/users/1/following' and '/users/1/followers' 
+    member do
+      get :following, :followers
+    end
+  end
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
   resources :microposts,          only: [:create, :destroy]
+  resources :relationships,       only: [:create, :destroy]
 
 end
 

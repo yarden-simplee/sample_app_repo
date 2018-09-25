@@ -1,5 +1,13 @@
 class User < ApplicationRecord
 	has_many :microposts, dependent: :destroy # The 'dependent' clause makes sure a user's microposts are destroyed along with it
+	has_many :active_relationships, class_name:  "Relationship", # We have to tell rails the class name here specfically because the class is named 'Relationship' and we name the association 'active_relationship'. They don't match. 
+                                  	foreign_key: "follower_id",
+                                  	dependent:   :destroy
+    has_many :passive_relationships, class_name:  "Relationship", # # We have to tell rails the class name here specfically because the class is named 'Relationship' and we name the association 'passive_relationship'. They don't match. 
+    								 foreign_key: "followed_id",
+    								 dependent:   :destroy  
+   	has_many :following, through: :active_relationships, source: :followed # Since we want to use 'following' instead of 'followeds' for readability, we override the default using the 'source' parameter that specifies that the source of the 'following' array is the set of followed ids
+   	has_many :followers, through: :passive_relationships, source: :follower # Here, the ':source' key could actually be omitted. Rails will singularize "followers" and automatically look for the foreign key 'follower_id'
 	attr_accessor :remember_token, :activation_token, :reset_token
 	before_save :downcase_email # automatically called before each 'create' and 'update' operation on the database
 	before_create :create_activation_digest # automatically called only before 'create' operations on the database
@@ -80,10 +88,28 @@ class User < ApplicationRecord
 		reset_sent_at < 2.hours.ago
 	end
 
-	# Defines a proto-feed.
-	# See "Following users" for the full implementation
+	# Returns a user's status feed.
 	def feed
-		Micropost.where("user_id = ?", id)
+		# Using a sub-select is more efficient. The entire query is performed in the database.
+		following_ids = "SELECT followed_id FROM relationships
+                     WHERE  follower_id = :user_id"
+    	Micropost.where("user_id IN (#{following_ids})
+                     OR user_id = :user_id", user_id: id)
+	end
+
+	# Follows a user
+	def follow(other_user)
+		following << other_user # Appends 'other_user' to the end of the array
+	end
+
+	# Unfollows a user
+	def unfollow(other_user)
+		following.delete(other_user)
+	end
+
+	# Returns true if the current user is following the other user.
+	def following?(other_user)
+		following.include?(other_user)
 	end
 
 	private

@@ -1,0 +1,6 @@
+<%# The 'Remote: true' argument tells rails to use Ajax, thereby sending a request asynchronously to the server without ever leaving the page %>
+<%= form_for(current_user.active_relationships.find_by(followed_id: @user.id),
+             html: { method: :delete },
+             remote: true) do |f| %>
+  <%= f.submit "Unfollow", class: "btn" %>
+<% end %>

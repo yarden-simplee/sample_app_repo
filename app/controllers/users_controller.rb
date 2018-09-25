@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   # 'before_action' is called 'before_filter' in previous rails versions
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy] # Makes sure user is logged in before allowing it to perform sensitive action
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :following, :followers] # Makes sure user is logged in before allowing it to perform sensitive action
   before_action :correct_user,   only: [:edit, :update] # Makes sure the user performing the action is the correct user
   before_action :admin_user,     only: :destroy # Make sure only admins can issue a user delete request
 
@@ -49,6 +49,20 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
     flash[:success] = "User deleted"
     redirect_to users_url
+  end
+
+  def following
+    @title = "Following"
+    @user = User.find(params[:id])
+    @users = @user.following.paginate(page: params[:page])
+    render 'show_follow'
+  end
+
+  def followers
+    @title = "Followers"
+    @user = User.find(params[:id])
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow'
   end
 
 

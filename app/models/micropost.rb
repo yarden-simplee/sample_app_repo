@@ -1,5 +1,5 @@
 class Micropost < ApplicationRecord
-  belongs_to :user
+  belongs_to :user # Rails infers that the 'user_id' column in the 'microposts' table is the foreign key. By default, rails will looks for a column named '<class>_id'
   default_scope -> { order(created_at: :desc) } # Orders rails to retrieve the microposts from the dastabase by 'created_at' in descending order so that the newest post will be shown at the top
   mount_uploader :picture, PictureUploader
   validates :user_id, presence: true

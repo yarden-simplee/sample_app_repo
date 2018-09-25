@@ -4,6 +4,9 @@
       	<%# We need to specify to look for partials in the 'shared' directory, since rails' default directory in this case will be 'views' %>
         <%= render 'shared/user_info' %> <%# A partial %>
       </section>
+      <section class="stats">
+      	<%= render 'shared/stats' %>
+      </section>
       <section class="micropost_form">
         <%= render 'shared/micropost_form' %> <%# A partial %>
       </section>
