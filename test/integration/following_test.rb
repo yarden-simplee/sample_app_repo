@@ -34,7 +34,7 @@ class FollowingTest < ActionDispatch::IntegrationTest
 
   test "should follow a user with Ajax" do
     assert_difference '@user.following.count', 1 do
-      post relationships_path, xhr: true, params: { followed_id: @other.id } # The 'xhr: true' specification tell Rails to issue an Ajax request
+      post relationships_path, xhr: true, params: { followed_id: @other.id } # The 'xhr: true' specification tells Rails to issue an Ajax request
     end
   end
 
@@ -50,7 +50,7 @@ class FollowingTest < ActionDispatch::IntegrationTest
     @user.follow(@other)
     relationship = @user.active_relationships.find_by(followed_id: @other.id)
     assert_difference '@user.following.count', -1 do
-      delete relationship_path(relationship), xhr: true # The 'xhr: true' specification tell Rails to issue an Ajax request
+      delete relationship_path(relationship), xhr: true # The 'xhr: true' specification tells Rails to issue an Ajax request
     end
   end
 
